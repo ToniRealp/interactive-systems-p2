@@ -5,6 +5,7 @@ using UnityEngine;
 public class HayMachineController : MonoBehaviour
 {
     public int movementSpeed = 10;
+    public int boostSpeed = 20;
     public int horizontalBoundary = 22;
     public GameObject hayBalePrefab;
     public Transform haySpawnPoint;
@@ -20,20 +21,20 @@ public class HayMachineController : MonoBehaviour
     private void UpdateMovement()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");
+        int speed = Input.GetButton("Boost") ? boostSpeed : movementSpeed;
 
         if (horizontalInput < 0 && transform.position.x > -horizontalBoundary)
         {
-            
-            transform.Translate(transform.right * (-movementSpeed * Time.deltaTime));
+            transform.Translate(transform.right * (-speed * Time.deltaTime));
         }
         else if(horizontalInput > 0 && transform.position.x < horizontalBoundary)
         {
-            transform.Translate(transform.right * (movementSpeed * Time.deltaTime));
+            transform.Translate(transform.right * (speed * Time.deltaTime));
         }
     }
     
     private void UpdateShooting() {
-        shootTimer -= Time.deltaTime;
+        shootTimer -= Input.GetButton("Boost") ? Time.deltaTime * 2 : Time.deltaTime;
         if (shootTimer <= 0 && Input.GetKey(KeyCode.Space)) {
             shootTimer = shootInterval;
             ShootHay();
