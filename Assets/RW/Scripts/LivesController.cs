@@ -23,6 +23,9 @@ public class LivesController : MonoBehaviour
     {
         remainingLives -= 1;
         sheepLives[remainingLives].SetActive(false);
-        
+        if (remainingLives == 0)
+        {
+            EventManager.OnGameOver.Invoke();
+        }
     }
 }

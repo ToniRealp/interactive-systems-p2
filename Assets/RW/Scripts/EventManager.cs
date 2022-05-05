@@ -17,5 +17,6 @@ public static class EventManager
     
     public static readonly UnityEvent<OnSheepHitInfo> OnSheepHit = new UnityEvent<OnSheepHitInfo>();
     public static readonly UnityEvent OnSheepDrop = new UnityEvent();
+    public static readonly UnityEvent OnGameOver = new UnityEvent();
     
 }
