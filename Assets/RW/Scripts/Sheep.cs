@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sheep : MonoBehaviour
 {
-    public float runSpeed;
+    public int runSpeed;
     public float gotHayDestroyDelay;
     public float dropDestroyDelay = 4; // 1
     private Collider myCollider; // 2
@@ -37,7 +37,7 @@ public class Sheep : MonoBehaviour
         sheepSpawner.RemoveSheepFromList (gameObject);
         myRigidbody.isKinematic = false;
         myCollider.isTrigger = false;
-        Destroy(gameObject, dropDestroyDelay );
+        StartCoroutine(ExecuteAfterDelay(dropDestroyDelay));
     }
     
     public void SetSpawner(SheepSpawner spawner)
@@ -45,17 +45,26 @@ public class Sheep : MonoBehaviour
         sheepSpawner = spawner;
     }
 
-    private void OnTriggerEnter(Collider other) // 1
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Hay") && !_hitByHay) // 2
+        if (other.CompareTag("Hay") && !_hitByHay)
         {
-            Destroy(other.gameObject); // 3
-            HitByHay(); // 4
+            EventManager.OnSheepHit.Invoke(new EventManager.OnSheepHitInfo(runSpeed));
+            Destroy(other.gameObject);
+            HitByHay();
         }
         else if (other.CompareTag("DropSheep"))
         {
             Drop();
         }
+    }
+    
+    IEnumerator ExecuteAfterDelay(float time)
+    {
+        yield return new WaitForSeconds(time);
+ 
+        EventManager.OnSheepDrop.Invoke();
+        Destroy(gameObject);
     }
 
 }

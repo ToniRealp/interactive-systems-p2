@@ -57,7 +57,7 @@ public class HayMachineController : MonoBehaviour
     }
     
     private void UpdateShooting() {
-        shootTimer -= Input.GetButton("Boost") ? Time.deltaTime * 2 : Time.deltaTime;
+        shootTimer -= Input.GetButton("Boost") && boostLeft > 0 ? Time.deltaTime * 2 : Time.deltaTime;
         if (shootTimer <= 0 && Input.GetKey(KeyCode.Space)) {
             shootTimer = shootInterval;
             ShootHay();
